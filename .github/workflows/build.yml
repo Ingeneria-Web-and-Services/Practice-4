@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          MONGODB_URI: mongodb://127.0.0.1:27017/drivedeal
+          SESSION_SECRET: ci-build-only-not-a-real-secret-0123456789
+          NEXT_TELEMETRY_DISABLED: 1
