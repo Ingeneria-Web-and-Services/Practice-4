@@ -1,10 +1,30 @@
+import SignInForm from "@/components/SignInForm";
+import Link from "next/link";
 export default function SignIn() {
   return (
-    <div className='text-center'>
-      <h1 className='text-3xl font-bold text-gray-900'>Sign in</h1>
-      <p className='mt-2 text-sm text-gray-500'>
-        Not implemented until Practice 4.
-      </p>
+    <div className="flex w-full flex-col px-6 py-12">
+      <div className="mx-auto w-full max-w-sm">
+        <img
+          className="mx-auto h-10 w-auto"
+          src="/img/logo.svg"
+          alt="DriveDeal logo"
+        />
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+      <div className="mx-auto mt-10 w-full max-w-sm">
+        <SignInForm />
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Not a member?{" "}
+          <Link
+            href="/auth/signup"
+            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >
+            Register now!
+          </Link>
+        </p>
+      </div>
     </div>
-  )
+  );
 }

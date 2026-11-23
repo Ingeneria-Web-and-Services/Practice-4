@@ -1,6 +1,12 @@
+'use client'
+
 import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface QuantitySelectorProps {
+  userId: string
+  productId: string
   qty: number
   disabled?: boolean
 }
@@ -13,15 +19,69 @@ const buttonClasses =
  * No functionality yet (Practice 3): the buttons do not change anything.
  */
 export default function QuantitySelector({
+  userId,
+  productId,
   qty,
   disabled = false,
 }: QuantitySelectorProps) {
+  const router = useRouter()
+  const [isUpdating, setIsUpdating] = useState(false)
+    const onPlusBtnClick = async function () {
+    setIsUpdating(true)
+    try {
+      await fetch(`/api/users/${userId}/cart/${productId}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          qty: qty + 1,
+        }),
+      })
+      router.refresh()
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
+  const onMinusBtnClick = async function () {
+    setIsUpdating(true)
+    try {
+      if (qty - 1 <= 0) {
+        // The API does not accept qty 0, so the product is removed instead
+        await fetch(`/api/users/${userId}/cart/${productId}`, {
+          method: 'DELETE',
+        })
+      } else {
+        await fetch(`/api/users/${userId}/cart/${productId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            qty: qty - 1,
+          }),
+        })
+      }
+      router.refresh()
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
+  const onTrashBtnClick = async function () {
+    setIsUpdating(true)
+    try {
+      await fetch(`/api/users/${userId}/cart/${productId}`, {
+        method: 'DELETE',
+      })
+      router.refresh()
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   return (
     <div className='inline-flex items-center gap-2'>
       <button
         type='button'
         className={buttonClasses}
-        disabled={disabled || qty <= 0}
+        onClick={onMinusBtnClick}
+        disabled={disabled || isUpdating || qty <= 0}
         aria-label='Remove one item'
       >
         <MinusIcon className='h-4 w-4' aria-hidden='true' />
@@ -32,7 +92,8 @@ export default function QuantitySelector({
       <button
         type='button'
         className={buttonClasses}
-        disabled={disabled}
+        onClick={onPlusBtnClick}
+        disabled={disabled || isUpdating}
         aria-label='Add one item'
       >
         <PlusIcon className='h-4 w-4' aria-hidden='true' />
@@ -40,7 +101,8 @@ export default function QuantitySelector({
       <button
         type='button'
         className={`${buttonClasses} text-red-700`}
-        disabled={disabled || qty <= 0}
+        onClick={onTrashBtnClick}
+        disabled={disabled || isUpdating || qty <= 0}
         aria-label='Remove product from the cart'
       >
         <TrashIcon className='h-4 w-4' aria-hidden='true' />

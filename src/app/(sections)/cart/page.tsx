@@ -34,7 +34,7 @@ export default async function Cart() {
         </div>
       ) : (
         <>
-          <ItemsTable items={items} editable />
+          <ItemsTable items={items} editable userId={session.userId} />
           <div className='mt-6 flex justify-center'>
             <Link
               href='/checkout'

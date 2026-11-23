@@ -11,8 +11,8 @@ export interface ItemLine {
 
 interface ItemsTableProps {
   items: ItemLine[]
-  /** Shows the quantity buttons (cart page) */
   editable?: boolean
+  userId?: string
 }
 
 export function calcTotal(items: ItemLine[]): number {
@@ -23,6 +23,7 @@ export function calcTotal(items: ItemLine[]): number {
 export default function ItemsTable({
   items,
   editable = false,
+  userId = '',
 }: ItemsTableProps) {
   const th =
     'px-3 py-3 text-xs font-medium tracking-wide text-gray-500 uppercase'
@@ -64,7 +65,15 @@ export default function ItemsTable({
                 </Link>
               </td>
               <td className='px-3 py-3 text-right text-sm whitespace-nowrap text-gray-900'>
-                {editable ? <QuantitySelector qty={item.qty} /> : item.qty}
+                {editable ? (
+                  <QuantitySelector
+                    userId={userId}
+                    productId={item.product._id.toString()}
+                    qty={item.qty}
+                  />
+                ) : (
+                  item.qty
+                )}
               </td>
               <td className='px-3 py-3 text-right text-sm whitespace-nowrap text-gray-900'>
                 {formatPrice(item.price)}
