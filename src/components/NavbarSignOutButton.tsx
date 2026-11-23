@@ -17,7 +17,7 @@ export default function NavbarSignOutButton({
     await fetch('/api/auth/signout', {
       method: 'POST',
     })
-    router.push('/')
+    router.push('/?signedOut=1')
     router.refresh()
   }
 
