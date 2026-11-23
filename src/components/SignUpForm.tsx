@@ -31,7 +31,7 @@ export default function SignUpForm() {
     if (!event.currentTarget.checkValidity()) {
       return false
     }
-    const res = await fetch('/api/auth/signin', {
+    const res = await fetch('/api/users', {
       method: 'POST',
       body: JSON.stringify({
         ...formValues,
@@ -39,17 +39,13 @@ export default function SignUpForm() {
     })
     if (res.ok) {
       setError('')
-      router.push('/')
-      router.refresh()
+      router.push('/auth/signin')
     } else {
       const data = await res.json()
-      if (data.error === 'WRONG_CREDENTIALS') {
-        setError(`Wrong e-mail or password.`)
-      } else {
-        setError(
+      setError(
+        data.message ??
           'An error occurred while processing your request. Please try again later.'
-        )
-      }
+      )
     }
   }
 
