@@ -68,7 +68,12 @@ export default async function Product({
             {formatPrice(product.price)}
           </p>
           <div className='mt-3'>
-            <QuantitySelector qty={qty} disabled={!session} />
+            <QuantitySelector
+              userId={session?.userId ?? ''}
+              productId={productId}
+              qty={qty}
+              disabled={!session}
+            />
             {!session && (
               <p className='mt-2 text-xs text-gray-500'>
                 Sign in to add this car to your cart.
