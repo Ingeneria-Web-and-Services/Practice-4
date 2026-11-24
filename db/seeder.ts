@@ -68,7 +68,7 @@ async function seed() {
       transmission: 'Manual',
       powerHp: 90,
       bodyType: 'Hatchback',
-      color: 'Valencia Orange',
+      color: 'Pearl White',
       doors: 5,
       seats: 5,
       numberOfOwners: 1,
