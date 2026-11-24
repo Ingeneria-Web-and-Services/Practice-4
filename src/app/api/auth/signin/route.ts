@@ -46,7 +46,6 @@ export async function POST(
     )
   }
 
-  // Upon success, the session cookie is created and sent back to the client
   await createSession({ userId: userId._id.toString() })
 
   return NextResponse.json(userId, { status: 200 })

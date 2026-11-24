@@ -5,7 +5,7 @@ const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
 
 const SESSION_COOKIE = 'session'
-const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // 7  days
+const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
 
 interface Payload extends JWTPayload {
   userId: string
@@ -36,7 +36,6 @@ export async function createSession(payload: Payload) {
   const session = await encode(payload)
   const expires = new Date(Date.now() + SESSION_DURATION_MS)
 
-  // In Next.js 15+ cookies() is asynchronous
   const cookieStore = await cookies()
   cookieStore.set(SESSION_COOKIE, session, {
     httpOnly: true,
