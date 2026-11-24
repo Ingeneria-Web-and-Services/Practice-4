@@ -6,10 +6,12 @@ import { navbarButtonClasses } from '@/components/NavbarButton'
 
 interface NavbarSignOutButtonProps {
   children: ReactNode
+  className?: string
 }
 
 export default function NavbarSignOutButton({
   children,
+  className = navbarButtonClasses,
 }: NavbarSignOutButtonProps) {
   const router = useRouter()
 
@@ -25,7 +27,7 @@ export default function NavbarSignOutButton({
     <button
       type='button'
       onClick={handleClick}
-      className={navbarButtonClasses}
+      className={className}
     >
       {children}
     </button>

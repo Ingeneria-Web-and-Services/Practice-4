@@ -22,18 +22,22 @@ export default async function NavbarCartButton({
     redirect('/auth/signin')
   }
 
+    const totalItems = cart.cartItems.reduce(
+    (partialSum, cartItem) => partialSum + cartItem.qty,
+    0
+  )
+
   return (
     <Link
       href={'/cart'}
       className={`relative inline-flex ${navbarButtonClasses}`}
     >
       {children}
-      <div className='absolute -right-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white dark:border-gray-900'>
-        {cart.cartItems.reduce(
-          (partialSum, cartItem) => partialSum + cartItem.qty,
-          0
-        )}
-      </div>
+      {totalItems > 0 && (
+        <div className='absolute -right-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white dark:border-gray-900'>
+          {totalItems}
+        </div>
+      )}
     </Link>
   )
 }
