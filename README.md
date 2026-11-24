@@ -223,7 +223,7 @@ no longer exists, e.g. after running the seeder again).
 | `ItemsTable` | `/cart`, `/checkout`, `/orders/[orderId]` | Table of products (image, name, quantity, unit price, total) and total price. With `editable` it shows the quantity selector (cart only). |
 | `QuantitySelector` | `/products/[productId]`, `/cart` | − / quantity / + / remove buttons. In Practice 3 the buttons had no functionality. |
 | `InfoList` | `/profile`, `/orders/[orderId]` | List of "icon + label: value" rows. |
-| `PurchaseForm` | `/checkout` | Shipping address, card holder and card number (13–23 digits). In Practice 3 submitting the form does not make a purchase yet. |
+| `CheckOutForm` | `/checkout` | Shipping address, card holder and card number (13–23 digits). Called `PurchaseForm` in Practice 3, where submitting the form did not make a purchase yet (see Practice 4). |
 
 Helpers in `src/lib/format.ts`: `formatPrice` (prices in euros),
 `formatDate` and `formatDateTime`. Icons: `@heroicons/react`.
@@ -283,7 +283,60 @@ to test `/profile` and `/orders/[orderId]`.
 - `src/components/SampleClientComponent.tsx` contains the `useState` /
   `useEffect` examples from the seminar. It is not rendered on any page.
 
-### Not implemented yet
+### Sign-up page
 
-- Sign up page (`/auth/signup`) is still a placeholder.
-- The sign-out button in the navbar does not work yet.
+- `/auth/signup` (`src/app/auth/signup/page.tsx`) is based on the sign-in page.
+- `SignUpForm` (`src/components/SignUpForm.tsx`) is a copy of `SignInForm`
+  with all the fields required to register: name, surname, e-mail, password,
+  address and birthdate. The values are kept in `useState`.
+- All fields are required and validated in the browser; the "Sign up" button
+  is disabled while the form is invalid.
+- The form sends `POST /api/users`. On success the user is redirected to
+  `/auth/signin`; on failure the message returned by the API is shown (e.g.
+  "A user with this e-mail address already exists.").
+- The "Sign up" link in the navbar and the "Register now!" link on the sign-in
+  page open this page.
+
+### Sign-in and sign-up layout
+
+- `src/app/auth/layout.tsx` shows a dark red header with the DriveDeal logo and
+  name (link to the home page) above the sign-in and sign-up pages. The logo
+  is white, so it is only shown on the dark header.
+
+### Sign out
+
+- `NavbarSignOutButton` (`src/components/NavbarSignOutButton.tsx`) is a Client
+  Component based on `NavbarButton`, but rendered as a `<button>` instead of a
+  link.
+- On click it sends `POST /api/auth/signout` (the session cookie is removed),
+  redirects to `/?signedOut=1` and refreshes the page, so the navbar shows
+  "Sign up" / "Sign in" again.
+- The home page reads the `signedOut` search parameter and shows the message
+  "You have been signed out." with the `Toast` component
+  (`src/components/Toast.tsx`). The message disappears after 4 seconds or can
+  be closed; the parameter is removed from the URL, so it is not shown again
+  after a refresh.
+
+### Checkout
+
+- `CheckOutForm` (`src/components/CheckOutForm.tsx`, formerly `PurchaseForm`)
+  is a Client Component with the shipping address, card holder and card
+  number. The values and the error message are kept in `useState`.
+- The checkout page (`/checkout`) reads the `userId` from the session and
+  passes it to the form as a prop.
+- On submit the form sends `POST /api/users/[userId]/orders`. The API creates
+  the order with the current prices, adds it to the user and empties the cart.
+  On success the user is redirected to the new order (`/orders/[orderId]`) and
+  the page is refreshed, so the cart badge is updated.
+- Validation: all fields are required and the card number must have 13–23
+  digits or spaces. The "Purchase" button is disabled while the form is
+  invalid or the request is running (no duplicate orders). Errors returned by
+  the API are shown in the form.
+
+### Production build
+
+Stop the development server first, then:
+
+```bash
+npm run build
+npm run start
