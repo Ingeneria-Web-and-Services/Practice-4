@@ -1,4 +1,5 @@
 import {
+  ArrowRightStartOnRectangleIcon,
   CakeIcon,
   EnvelopeIcon,
   HomeIcon,
@@ -7,6 +8,7 @@ import {
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import InfoList from '@/components/InfoList'
+import NavbarSignOutButton from '@/components/NavbarSignOutButton'
 import PageTitle from '@/components/PageTitle'
 import { getSession } from '@/lib/auth'
 import { formatDate } from '@/lib/format'
@@ -49,6 +51,17 @@ export default async function Profile() {
           },
         ]}
       />
+
+      
+      <div className='mt-6'>
+        <NavbarSignOutButton className='inline-flex items-center gap-2 rounded-md bg-red-700 px-4 py-2 text-sm font-medium text-white hover:bg-red-800 focus:outline-hidden focus:ring-2 focus:ring-red-700 focus:ring-offset-2'>
+          <ArrowRightStartOnRectangleIcon
+            className='h-5 w-5'
+            aria-hidden='true'
+          />
+          Sign out
+        </NavbarSignOutButton>
+      </div>
 
       <h3 className='pt-8 pb-4 text-2xl font-bold text-gray-900'>Orders</h3>
       {orders.length === 0 ? (
