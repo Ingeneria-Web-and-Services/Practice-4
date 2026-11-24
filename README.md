@@ -192,8 +192,7 @@ and the signed-in user with `getSession()`.
 | ---- | ----------- |
 | `layout.tsx` | Root layout: Inter font, global styles and page title "DriveDeal". |
 | `(sections)/layout.tsx` | Layout of the main sections: `Navbar`, `Header`, the page content and `Footer`. The route group `(sections)` does not appear in the URL. |
-| `auth/layout.tsx` | Layout of `/auth/signin` and `/auth/signup`: centred content, **without** navbar, header or footer. |
-
+| `auth/layout.tsx` | Layout of `/auth/signin` and `/auth/signup`: **without** navbar, header or footer. In Practice 4 a simple dark red bar with the DriveDeal logo and name was added at the top. |
 ### Sections
 
 | Route | File | Content |
@@ -204,7 +203,7 @@ and the signed-in user with `getSession()`.
 | `/checkout` | `(sections)/checkout/page.tsx` | Same table as the cart, but without the quantity buttons, plus the purchase form (shipping address, card holder, card number). Empty cart -> message and no form. |
 | `/orders/[orderId]` | `(sections)/orders/[orderId]/page.tsx` | Order ID, shipping address, payment information and date of purchase, followed by the table of the ordered products with the price at the moment of the purchase. Orders of another user, invalid or unknown IDs -> 404. |
 | `/profile` | `(sections)/profile/page.tsx` | Full name, e-mail, address and birthdate of the user, and a table of the user's orders (ID, shipping address, payment information). Each order links to its details page. No orders -> "You have not made any purchase yet". |
-| `/auth/signin`, `/auth/signup` | `auth/...` | Placeholders in Practice 3 (sign in is implemented in Seminar 4, sign up in Practice 4). |
+| `/auth/signin`, `/auth/signup` | `auth/...` | Placeholders in Practice 3. Sign in was implemented in Seminar 4 and sign up in Practice 4. |
 
 `/cart`, `/checkout`, `/orders/[orderId]` and `/profile` redirect to
 `/auth/signin` when the user is not signed in (or when the user of the session
@@ -223,7 +222,7 @@ no longer exists, e.g. after running the seeder again).
 | `ItemsTable` | `/cart`, `/checkout`, `/orders/[orderId]` | Table of products (image, name, quantity, unit price, total) and total price. With `editable` it shows the quantity selector (cart only). |
 | `QuantitySelector` | `/products/[productId]`, `/cart` | − / quantity / + / remove buttons. In Practice 3 the buttons had no functionality. |
 | `InfoList` | `/profile`, `/orders/[orderId]` | List of "icon + label: value" rows. |
-| `CheckOutForm` | `/checkout` | Shipping address, card holder and card number (13–23 digits). Called `PurchaseForm` in Practice 3, where submitting the form did not make a purchase yet (see Practice 4). |
+| `CheckOutForm` | `/checkout` | Shipping address, card holder and card number (13–23 digits). Called `PurchaseForm` in Practice 3, where submitting the form did not make a purchase yet. |
 
 Helpers in `src/lib/format.ts`: `formatPrice` (prices in euros),
 `formatDate` and `formatDateTime`. Icons: `@heroicons/react`.
@@ -232,7 +231,7 @@ Helpers in `src/lib/format.ts`: `formatPrice` (prices in euros),
 
 Since the sign-in page did not exist yet, the session was created from the
 browser console (DevTools) with `fetch` requests to `POST /api/auth/signin`
-and `POST /api/auth/signout` (Seminar 3, slide 26). The seeder creates no
+and `POST /api/auth/signout`. The seeder creates no
 orders, so orders were created with Postman (`POST /api/users/[userId]/orders`)
 to test `/profile` and `/orders/[orderId]`.
 
@@ -276,7 +275,7 @@ to test `/profile` and `/orders/[orderId]`.
 - `NavbarCartButton` (`src/components/NavbarCartButton.tsx`) is a Server
   Component that replaces the cart button in the navbar. It reads the cart of
   the signed-in user and shows the total number of items (sum of all
-  quantities) in a red badge.
+  quantities) in a red badge. The badge is hidden when the cart is empty.
 
 ### React hooks example
 
@@ -316,6 +315,9 @@ to test `/profile` and `/orders/[orderId]`.
   (`src/components/Toast.tsx`). The message disappears after 4 seconds or can
   be closed; the parameter is removed from the URL, so it is not shown again
   after a refresh.
+  - The profile page (`/profile`) also has a "Sign out" button. It uses the same
+  `NavbarSignOutButton` component with a different style: the component
+  accepts an optional `className` prop (default: the navbar button style).
 
 ### Checkout
 
@@ -340,3 +342,28 @@ Stop the development server first, then:
 ```bash
 npm run build
 npm run start
+```
+
+The app runs at http://localhost:3000. The code uses no `any` types and no
+`@ts-ignore`.
+
+A GitHub Actions workflow (`.github/workflows/build.yml`) runs `npm run build`
+on every pull request. A ruleset on `main` only allows changes through pull
+requests, and a pull request can only be merged when the build passes.
+
+### Manual testing
+
+After `npm run seed`, the following flow was tested in the development server
+and in the production server:
+
+1. Sign up a new user (empty form, invalid e-mail and an existing e-mail are
+   rejected) and sign in with it (wrong password is rejected).
+2. Add cars to the cart from the product page; use + / − / remove on the
+   product page and in the cart. The totals and the navbar badge are updated,
+   and the badge is hidden when the cart is empty.
+3. Check out (empty form and invalid card number are rejected). After the
+   purchase the order details page is shown, the cart is empty and the order
+   is listed in `/profile`.
+4. Sign out from the navbar and from `/profile`; the message "You have been
+   signed out." is shown and `/cart`, `/checkout` and `/profile` redirect to
+   `/auth/signin`.
