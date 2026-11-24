@@ -36,7 +36,7 @@ export default async function Checkout() {
       ) : (
         <>
           <ItemsTable items={items} />
-          <CheckOutForm />
+          <CheckOutForm userId={session.userId} />
         </>
       )}
     </div>
