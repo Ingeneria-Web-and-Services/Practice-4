@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import ItemsTable from '@/components/ItemsTable'
 import PageTitle from '@/components/PageTitle'
-import PurchaseForm from '@/components/PurchaseForm'
+import CheckOutForm from '@/components/CheckOutForm'
 import { getSession } from '@/lib/auth'
 import { getCart } from '@/lib/handlers'
 
@@ -36,7 +36,7 @@ export default async function Checkout() {
       ) : (
         <>
           <ItemsTable items={items} />
-          <PurchaseForm />
+          <CheckOutForm />
         </>
       )}
     </div>
