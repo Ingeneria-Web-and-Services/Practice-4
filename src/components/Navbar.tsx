@@ -6,6 +6,7 @@ import {
 import Link from 'next/link'
 import NavbarButton from '@/components/NavbarButton'
 import NavbarCartButton from '@/components/NavbarCartButton'
+import NavbarSignOutButton from '@/components/NavbarSignOutButton'
 import { getSession } from '@/lib/auth'
 
 export default async function Navbar() {
@@ -41,14 +42,13 @@ export default async function Navbar() {
                   <span className='sr-only'>User profile</span>
                   <UserIcon className='h-6 w-6' aria-hidden='true' />
                 </NavbarButton>
-                {/* Not implemented until Seminar 4 */}
-                <NavbarButton href='#'>
+                <NavbarSignOutButton>
                   <span className='sr-only'>Sign out</span>
                   <ArrowRightStartOnRectangleIcon
                     className='h-6 w-6'
                     aria-hidden='true'
                   />
-                </NavbarButton>
+                </NavbarSignOutButton>
               </>
             ) : (
               <>
