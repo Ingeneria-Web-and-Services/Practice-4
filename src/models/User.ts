@@ -43,7 +43,6 @@ const UserSchema = new Schema<User>({
     required: true,
   },
 
-  // Subdocument array
   cartItems: [
     {
       _id: false,
@@ -60,7 +59,6 @@ const UserSchema = new Schema<User>({
     },
   ],
 
-  // Reference array
   orders: [
     {
       type: Schema.Types.ObjectId,

@@ -14,7 +14,6 @@ export default function Toast({ message }: ToastProps) {
     // Remove ?signedOut=1 from the URL so the message is not shown again on refresh
     window.history.replaceState(null, '', window.location.pathname)
 
-    // Hide the message after 4 seconds
     const timer = setTimeout(() => setVisible(false), 4000)
     return () => clearTimeout(timer)
   }, [])

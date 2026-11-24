@@ -16,7 +16,6 @@ const buttonClasses =
 
 /**
  * Add / remove an item or remove the product from the cart.
- * No functionality yet (Practice 3): the buttons do not change anything.
  */
 export default function QuantitySelector({
   userId,
@@ -26,7 +25,7 @@ export default function QuantitySelector({
 }: QuantitySelectorProps) {
   const router = useRouter()
   const [isUpdating, setIsUpdating] = useState(false)
-    const onPlusBtnClick = async function () {
+  const onPlusBtnClick = async function () {
     setIsUpdating(true)
     try {
       await fetch(`/api/users/${userId}/cart/${productId}`, {

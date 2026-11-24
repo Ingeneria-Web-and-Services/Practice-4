@@ -137,7 +137,7 @@ export default function CheckOutForm({ userId }: CheckOutFormProps) {
             }
           />
           <p className={fieldErrorClasses}>
-            Please input a valid card number (13–19 digits).
+            Please input a valid card number (13-23 digits).
           </p>
         </div>
       </div>
